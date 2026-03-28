@@ -1,0 +1,80 @@
+{% extends "adminpanel/base.html" %}
+
+
+{% block content %}
+<style>
+    .rev{
+        width: 90%;
+        margin-left: 5%;
+    }
+    .box{
+        border: 1px solid;
+        padding: 20px;
+    }
+    .cort{
+        color: green;
+    }
+    .wro{
+        color: red;
+    }
+</style>
+
+<div class="container rev">
+
+    <h2>Final Test Review</h2>
+
+    <div class="summary-box">
+        <p><strong>Student:</strong> {{ student.user_id }}</p>
+        <p><strong>Exam Date:</strong> {{ date }}</p>
+        <p><strong>Average Percentage:</strong> {{ average_percentage }}%</p>
+        <p><strong>Remark:</strong> {{ remark }}</p>
+    </div>
+
+    <hr>
+
+    {% if review_data %}
+        {% for item in review_data %}
+        <div class="review-box box">
+
+            <p>
+                <strong>Q{{ forloop.counter }}.</strong>
+                {{ item.question }}
+            </p>
+
+            <p>
+                <strong>Student Answer:</strong>
+                {% if item.selected %}
+                    {% if item.is_correct %}
+                        <span class="correct cort" >
+                            {{ item.selected }} ✔ (Correct)
+                        </span>
+                    {% else %}
+                        <span class="wrong wro">
+                            {{ item.selected }} ✘ (Wrong)
+                        </span>
+                    {% endif %}
+                {% else %}
+                    <span class="skipped">Not Answered</span>
+                {% endif %}
+            </p>
+
+            <p>
+                <strong>Correct Answer:</strong>
+                <span class="correct">{{ item.correct }}</span>
+            </p>
+
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No review data available.</p>
+    {% endif %}
+
+    
+    <a href="{% url 'final_result_history' %}" style="display:inline-block; margin-top:20px; padding:8px 15px; background-color:#eee; color:#333; text-decoration:none; border:1px solid #ccc;">
+        ← Back to Exam History
+    </a>
+
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "adminpanel/base.html" %}
+
+{% block title %}{{ student.firstname }} {{ student.lastname }} - Results{% endblock %}
+
+{% block content %}
+<div class="content-scroll">
+  
+  <!-- Student Name -->
+  <div class="stud">
+    <h1>{{ student.firstname }} {{ student.lastname }} - Test History</h1>
+  </div>
+
+  <!-- Filter Form -->
+  <form method="get" style="margin-bottom: 20px;">
+    <label>Filter: </label>
+    <select name="type" onchange="this.form.submit()">
+        <option value="all" {% if result_type == "all" %}selected{% endif %}>All Results</option>
+        <option value="mock" {% if result_type == "mock" %}selected{% endif %}>Mock Only</option>
+        <option value="final" {% if result_type == "final" %}selected{% endif %}>Final Only</option>
+    </select>
+  </form>
+
+  <!-- Results Table -->
+  <table border="1" cellpadding="8" cellspacing="0" style="width:100%; border-collapse: collapse;">
+    <tr>
+      <th>Subject</th>
+      <th>Score</th>
+      <th>Percentage</th>
+      <th>Remark</th>
+      <th>Date</th>
+    </tr>
+
+    {% for result in page_obj %}
+    <tr>
+      <td>{{ result.subject }}</td>
+      <td>{{ result.score }}</td>
+      <td>{{ result.percentage|floatformat:2 }}%</td>
+      <td>{{ result.remark }}</td>
+      <td>
+        {% if result_type == "mock" %}
+          {{ result.date|date:"Y-m-d H:i" }}
+        {% else %}
+          {{ result.date|date:"Y-m-d H:i" }}
+        {% endif %}
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="6" style="text-align:center;">No results found.</td></tr>
+    {% endfor %}
+  </table>
+
+  <!-- Pagination -->
+  <nav>
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            </li>
+            {% endif %}
+
+            <li class="page-item active">
+                <span class="page-link">{{ page_obj.number }}</span>
+            </li>
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+</div>
+{% endblock %}

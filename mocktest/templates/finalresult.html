@@ -1,0 +1,98 @@
+{% extends "student_dashboard.html" %}
+
+{% block content %}
+<div style="max-width: 850px; margin: auto; border: 2px solid #000; padding: 25px; border-radius: 10px; font-family: Arial, sans-serif;">
+
+    <!-- HEADER -->
+    <table style="width: 100%; border-bottom: 2px solid #000; margin-bottom: 20px;">
+        <tr>
+            <td style="width: 200px;">
+                <img src="../static/images/technokraft-logo.png" alt="Logo" style="width:200px; height:70px;">
+            </td>
+            <td style="text-align: center;">
+                <h2 style="margin: 0;">Medical Coding Mock Test</h2>
+                <h4 style="margin: 0;">Marksheet / Result Sheet</h4>
+            </td>
+        </tr>
+    </table>
+
+    <!-- STUDENT DETAILS -->
+    <table style="width: 100%; border-collapse: collapse; text-align: left; ">
+        <tr>
+            <td><strong>Student Name:</strong></td>
+            <td>{{ firstname }} {{ lastname }}</td>
+            <td><strong>Student ID:</strong></td>
+            <td>{{ student_id }}</td>
+        </tr>
+
+        <tr>
+            <td><strong>Test Date:</strong></td>
+            <td>{{ test_date|date:"d-m-Y" }}</td>
+            <td><strong>Total Questions:</strong></td>
+            <td>100</td>
+        </tr>
+
+        <tr>
+            <td><strong>Attempted:</strong></td>
+            <td>{{ attempted}}</td>
+            <td><strong>Time:</strong></td>
+            <td>{{ test_date|time:"h:i A" }}</td>
+        </tr>
+
+        <tr>
+            <td><strong>Percentage:</strong></td>
+            <td>{{ percentage }}%</td>
+            <td><strong>Status:</strong></td>
+            <td>
+                {% if percentage >= 70 %}
+                    <span style="color: green; font-weight: bold;">PASS</span>
+                {% else %}
+                    <span style="color: red; font-weight: bold;">FAIL</span>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+
+    <br>
+
+    <!-- SUBJECT WISE MARKSHEET -->
+    <h3 style="text-align: center; margin-top: 20px;">Subject-wise Performance</h3>
+
+    <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin-top: 10px; text-align: center;">
+        <tr style="background: #f2f2f2;">
+            <th style="padding: 10px; border: 1px solid #000;">Subject</th>
+            <th style="padding: 10px; border: 1px solid #000;">Percentage (%)</th>
+        </tr>
+
+        {% for s in subject_results %}
+        <tr>
+            <td style="padding: 10px; border: 1px solid #000;">{{ s.name }}</td>
+            <td style="padding: 10px; border: 1px solid #000;">{{ s.percentage }}%</td>
+        </tr>
+        {% endfor %}
+
+        <!-- AVERAGE -->
+        <tr style="background: #e8ffe8; font-weight: bold;">
+            <td style="padding: 10px; border: 1px solid #000;">Average Percentage</td>
+            <td style="padding: 10px; border: 1px solid #000;">{{ average_percentage }}%</td>
+        </tr>
+    </table>
+
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="{% url 'final_review' %}"
+            style="display:inline-block;background:#007bff;color:#fff;
+                    border-radius:5px;padding:10px 15px;text-decoration:none;">
+            Final Review
+        </a>
+
+
+
+        <h5 style="color: red; margin-top: 20px;">
+            * Passing Percentage is 70% and above as per Global Certification Standards
+        </h5>
+        <p>Technokraft Training & Solutions Pvt. Ltd.</p>
+        <p style="font-size: 12px; color: gray;">This is a system-generated marksheet, no signature required.</p>
+    </div>
+
+</div>
+{% endblock %}

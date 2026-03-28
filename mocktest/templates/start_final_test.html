@@ -1,0 +1,69 @@
+{% extends "student_dashboard.html" %}
+{% block content %}
+<div class="full-center-page">
+    <div class="start-container">
+        <h1>Exam Guidelines</h1>
+
+        <div class="instructions">
+            <ol>
+                <li>Time Limit: 4 Hours</li>
+                <li>The exam consists of 18 subsections, each with different number of questions.</li>
+                <li>Each question carries 1 mark.</li>
+                <li>No negative marking.</li>
+                <li>Do not refresh or leave the page during the exam.</li>
+                <li>Switching tabs or exiting fullscreen may auto-submit your test.</li>
+                <li>Ensure you have a stable internet connection before starting.</li>
+            </ol>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="agree-container">
+                <input type="checkbox" id="agree" name="agree" required>
+                <label for="agree">I have read and agree to the exam rules and guidelines</label>
+            </div>
+            <button type="submit" id="start-btn">Start Final Test</button>
+        </form>
+    </div>
+</div>
+
+<style>
+body { margin: 0; font-family: Arial, sans-serif; background: #f0f2f5; }
+
+/* Center container vertically and horizontally */
+.full-center-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.start-container {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    text-align: center;
+    width: 450px;
+    margin-top: 10px;
+}
+
+.instructions { text-align: left; margin-bottom: 10px; }
+.instructions li { margin-bottom: 10px; font-size: 15px; line-height: 1.5; }
+
+.agree-container { margin-bottom: 20px; text-align: left; }
+input[type="checkbox"] { margin-right: 10px; transform: scale(1.2); }
+
+button {
+    padding: 12px 25px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+button:hover { background-color: #45a049; }
+</style>
+{% endblock %}

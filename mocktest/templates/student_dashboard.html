@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Dashboard {% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/custom_admin.css' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="icon" type="image/x-icon" href="{% static 'css/images/ttslogo.png' %}">
+
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Fixed Sidebar -->
+  <div class="sidebar">
+    <div style="background-color: white;border-radius: 5px; padding: 5px;height: 65px;">
+      <img src="{% static 'images/technokraft-logo.png' %}" class="logo" alt="Logo">
+    </div>
+    <a href="{% url 'student_progress' %}">🏠 Dashboard</a>
+    <a href="{% url 'start_test' %}"> Mock Test</a>
+    <a href="{% url 'start_final_test' %}">Final Exam Mock</a>
+    <a href="{% url 'result' %}">Mock Test Result</a>
+    <a href="{% url 'final_result' %}">Final Test Result</a>
+    <a href="{% url 'test_history' %}">Mock Test History</a>
+    <a href="{% url 'final_result_history' %}">Final Results History</a>
+    <div style="margin-top: auto;">
+    <a href="{% url 'logout' %}" 
+       style="display: block; background-color: #e63946; color: white; text-align: center; 
+              padding: 10px; border-radius: 5px; margin-top: 20px;">
+      🚪 Logout
+    </a>
+  </div>
+  </div>
+  
+
+  <!-- Main Section -->
+  <div class="main">
+    <div class="topbar">
+      <h2>Student Dashboard</h2>
+      <h3>Welcome, {{ student.firstname }} {{student.lastname}}</h3>
+    </div>
+    <div>
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</body>
+</html>

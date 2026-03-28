@@ -1,0 +1,53 @@
+{% extends "adminpanel/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-3">Mock Test Results</h2>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Student</th>
+                <th>Subject</th>
+                <th>Score</th>
+                <th>Total</th>
+                <th>Percentage</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in page_obj %}
+            <tr>
+                <td>{{ r.student.name }}</td>
+                <td>{{ r.subject.name }}</td>
+                <td>{{ r.score }}</td>
+                <td>{{ r.total_marks }}</td>
+                <td>{{ r.percentage }}%</td>
+                <td>{{ r.date_taken }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <nav>
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            </li>
+            {% endif %}
+
+            <li class="page-item active">
+                <span class="page-link">{{ page_obj.number }}</span>
+            </li>
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endblock %}

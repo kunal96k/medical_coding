@@ -1,0 +1,73 @@
+{% extends "adminpanel/base.html" %}
+{% block title %}Results{% endblock %}
+{% block page_title %}Results{% endblock %}
+
+{% block content %}
+<div style="margin: 20px;">
+  <div class="stud" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h1 style="margin: 0;">Test Results</h1>
+  </div>
+
+  <table border="1" cellpadding="6" cellspacing="0" 
+         style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+    <tr style="background-color: #f3f3f3;">
+      <th>ID</th>
+      <th>Student</th>
+      <th>Subject</th>
+      <th>Attempted</th>
+      <th>Score</th>
+      <th>Percentage</th>
+      <th>Remark</th>
+      <th>Date Taken</th>
+    </tr>
+
+    {% for result in page_obj.object_list %}
+      <tr>
+        <td>{{ result.id }}</td>
+        <td>
+          <a href="{% url 'student_result_history' result.student.user_id %}" 
+            style="color: #11224E; text-decoration: none; font-weight: 500;">
+            {{ result.student.firstname }} {{ result.student.lastname }}
+          </a>
+
+        </td>
+        <td>{{ result.subject.name }}</td>
+        <td>{{ result.total_questions }}</td>
+        <td>{{ result.score }}</td>
+        <td>{{ result.percentage|floatformat:2 }}%</td>
+        <td>{{ result.remark }}</td>
+        <td>{{ result.date_taken|date:"d M Y, H:i" }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="8" style="text-align:center;">No results available.</td></tr>
+    {% endfor %}
+  </table>
+
+  <!-- ✅ Pagination Controls -->
+  <div class="pagination" style="display: flex; gap: 5px; justify-content: center; align-items: center;">
+    {% if page_obj.has_previous %}
+      <a href="?page=1" style="padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px;">&laquo; First</a>
+      <a href="?page={{ page_obj.previous_page_number }}" style="padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px;">« Prev</a>
+    {% else %}
+      <span class="disabled" style="padding: 5px 10px; color: #999;">&laquo; First</span>
+      <span class="disabled" style="padding: 5px 10px; color: #999;">« Prev</span>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+      {% if page_obj.number == num %}
+        <span class="current" style="padding: 5px 10px; background-color: #11224E; color: white; border-radius: 4px;">{{ num }}</span>
+      {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+        <a href="?page={{ num }}" style="padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px;">{{ num }}</a>
+      {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}" style="padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px;">Next »</a>
+      <a href="?page={{ page_obj.paginator.num_pages }}" style="padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px;">Last &raquo;</a>
+    {% else %}
+      <span class="disabled" style="padding: 5px 10px; color: #999;">Next »</span>
+      <span class="disabled" style="padding: 5px 10px; color: #999;">Last &raquo;</span>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

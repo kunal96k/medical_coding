@@ -1,0 +1,79 @@
+{% extends "student_dashboard.html" %}
+
+{% block content %}
+
+<div class="start-wrapper">
+    <div class="start-container">
+        <h1>Start Mock Test</h1>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <label for="subject">Select Exam:</label><br>
+            <select name="subject" id="subject" required>
+                <option value="" disabled selected>-- Choose Subject --</option>
+                {% for subject in subjects %}
+                <option value="{{ subject.id }}">{{ subject.name }}</option>
+                {% endfor %}
+            </select><br>
+
+            <div>
+                <h4>Instruction:</h4>
+                <p>
+                    Time Limit: 60 Mins<br>
+                    Each Question Carries 1 Marks<br>
+                    No Negative Marking<br>
+                    Do Not Refresh The Page During The Test<br>
+                </p>
+            </div>
+
+            <button type="submit">Start Test</button>
+        </form>
+    </div>
+</div>
+
+<style>
+    /* DO NOT TOUCH BODY. ONLY STYLE INSIDE CONTENT BOX */
+
+    .start-wrapper {
+        display: flex;
+        justify-content: center;
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
+
+    .start-container {
+        background: white;
+        padding: 30px;
+        width: 450px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+
+    select, button {
+        padding: 10px 15px;
+        margin: 10px 0;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+        width: 100%;
+    }
+
+    button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+
+    p {
+        font-size: small;
+    }
+</style>
+
+{% endblock %}

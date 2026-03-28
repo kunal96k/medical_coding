@@ -1,0 +1,117 @@
+{% extends "adminpanel/base.html" %}
+{% block title %}Edit Question{% endblock %}
+{% block page_title %}Edit Question{% endblock %}
+
+{% block content %}
+
+<style>
+  .form-container {
+    margin-left: 30px;
+    margin-top: 20px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+
+  label {
+    display: block;
+    margin-top: 15px;
+    font-weight: 600;
+    color: #11224E;
+  }
+
+  input[type="text"], textarea, select, input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+
+  .options-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .options-row > div {
+    flex: 1;
+  }
+
+  .button-group {
+    margin-top: 20px;
+  }
+
+  .button-group button {
+    background-color: #11224E;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+
+  .button-group button:hover {
+    background-color: #0d1b3b;
+  }
+
+  .cancel-btn {
+    background-color: #6c757d;
+  }
+
+  .cancel-btn:hover {
+    background-color: #5a6268;
+  }
+  .test {
+    height: 100px;
+  }
+</style>
+
+<div class="form-container">
+  <form method="POST">
+    {% csrf_token %}
+    
+    <label for="subject">Subject:</label>
+    <select name="subject" required>
+      {% for sub in subjects %}
+        <option value="{{ sub.id }}" {% if sub.id == question.subject.id %}selected{% endif %}>{{ sub.name }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="question_text">Question Text:</label>
+    <textarea name="question_text" rows="3"  class="test" required>{{ question.question_text }}</textarea>
+
+    <label>Options:</label>
+    <div class="options-row">
+      <div>
+        <label for="option1">Option 1</label>
+        <input type="text" name="option1" value="{{ question.option1 }}" required>
+      </div>
+      <div>
+        <label for="option2">Option 2</label>
+        <input type="text" name="option2" value="{{ question.option2 }}" required>
+      </div>
+      <div>
+        <label for="option3">Option 3</label>
+        <input type="text" name="option3" value="{{ question.option3 }}" required>
+      </div>
+      <div>
+        <label for="option4">Option 4</label>
+        <input type="text" name="option4" value="{{ question.option4 }}" required>
+      </div>
+    </div>
+
+    <label for="correct_answer">Correct Answer:</label>
+    <input type="text" name="correct_answer" value="{{ question.correct_answer }}" required>
+
+    
+    <div class="button-group">
+      <button type="submit">Update Question</button>
+      
+  </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "student_dashboard.html" %}
+{% block content %}
+<h2 style="margin-left: 25px;">{{ student.firstname }} {{ student.lastname }} - Mock Test History</h2>
+
+<table border="1" style="margin-left: 25px;width: 95%;">
+    <tr>
+        <th>Attempt</th>
+        <th>Subject</th>
+        <th>Score</th>
+        <th>Attempted</th>
+        <th>Total Questions</th>
+        <th>Percentage</th>
+        <th>Remark</th>
+        <th>Date</th>
+    </tr>
+    {% for r in results %}
+    <tr>
+        <td>{{ r.attempt_no }}</td>
+        <td>{{ r.subject.name }}</td>
+        <td>{{ r.score }}</td>
+        <td>{{ r.total_questions }}</td>
+        <td>30</td>
+        <td>{{ r.percentage|floatformat:2 }}%</td>
+        <td>
+
+            {% if r.percentage >= 70 %}
+                <span style="color: green; font-weight: bold;">PASS</span>
+            {% else %}
+                <span style="color: red; font-weight: bold;">FAIL</span>
+            {% endif %}
+        </td>
+        <td>{{ r.date_taken|date:"d M Y H:i" }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

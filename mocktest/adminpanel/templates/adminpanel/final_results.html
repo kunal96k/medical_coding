@@ -1,0 +1,59 @@
+{% extends "adminpanel/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-3" style="margin-left: 30px; ">Final Test Results</h2>
+
+    <table class="table table-bordered table-hover" style="margin-left: 30px; width: 96%;">
+        <thead class="table-dark">
+            <tr>
+                <th>Student</th>
+                <th>Percentage %</th>
+                <th>Test Date</th>
+                <th>View</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in page_obj %}
+            <tr>
+                <td>{{ r.student.firstname }} {{ r.student.lastname }}</td>
+                <td><b>{{ r.average_percentage }}%</b></td>
+                <td>{{ r.test_date }}</td>
+                <td>
+                    <a href="{% url 'final_result_history' r.id %}" class="btn btn-primary btn-sm">
+                        View Details
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="pagination" style="display: flex; gap: 5px; justify-content: center; align-items: center;margin-top: 20px;margin-bottom: 20px;">
+    {% if page_obj.has_previous %}
+      <a href="?page=1" style="padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px;">&laquo; First</a>
+      <a href="?page={{ page_obj.previous_page_number }}" style="padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px;">« Prev</a>
+    {% else %}
+      <span class="disabled" style="padding: 5px 10px; color: #999;">&laquo; First</span>
+      <span class="disabled" style="padding: 5px 10px; color: #999;">« Prev</span>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+      {% if page_obj.number == num %}
+        <span class="current" style="padding: 5px 10px; background-color: #11224E; color: white; border-radius: 4px;">{{ num }}</span>
+      {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+        <a href="?page={{ num }}" style="padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px;">{{ num }}</a>
+      {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}" style="padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px;">Next »</a>
+      <a href="?page={{ page_obj.paginator.num_pages }}" style="padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px;">Last &raquo;</a>
+    {% else %}
+      <span class="disabled" style="padding: 5px 10px; color: #999;">Next »</span>
+      <span class="disabled" style="padding: 5px 10px; color: #999;">Last &raquo;</span>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

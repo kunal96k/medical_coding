@@ -1,0 +1,58 @@
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+        .logo {
+            float: left;
+            width: 80px;
+            height: 80px;
+        }
+        .school-name {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .sub-title {
+            font-size: 14px;
+            color: gray;
+        }
+        .student-info {
+            border: 1px solid black;
+            padding: 10px;
+            margin-top: -1px;
+        }
+        .student-info span {
+            display: inline-block;
+            margin-right: 20px;
+            font-weight: bold;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: -1px;
+            text-align: center;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .website {
+            color: red;
+            font-weight: bold;
+        }
+    
+
+        .review-container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+      

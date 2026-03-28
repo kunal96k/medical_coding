@@ -1,0 +1,156 @@
+
+body {
+  font-family: "Roboto Slab", serif;
+  font-optical-sizing: auto;
+  margin: 0;
+  display: flex;
+  min-height: 100vh; /* ensure full screen height layout */
+  background: #f9f9f9;
+}
+
+/* --- Sidebar --- */
+.sidebar {
+  width: 200px;
+    background: #11224E;
+    color: white;
+    height: 100vh;
+    padding: 20px;
+    position: fixed;   /* Ensure on top of other elements */
+}
+
+
+
+
+.sidebar a {
+  margin-top: 10px;
+  height: 25px;
+  border-radius: 5px;
+  border: 1px solid white;
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 8px 0;
+  text-align: center;
+  transition: background 0.3s;
+}
+
+.sidebar a:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* --- Logo --- */
+.logo {
+  height: 60px;
+  width: auto;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+/* --- Main content --- */
+/* --- Main content --- */
+.main {
+  margin-left: 240px; 
+  padding: 0; /* Remove padding here, move it inside .content-scroll for better control */
+  min-height: 100vh;
+  /* Remove overflow-x: hidden; or keep it if needed for horizontal overflow,
+     but it won't solve the vertical scroll issue here. */
+  flex-grow: 1; /* Ensure it takes up all available width */
+  display: flex; /* New: Use flexbox to stack topbar and content */
+  flex-direction: column; /* New: Stack children vertically */
+}
+
+/* --- Topbar --- */
+.topbar {
+  height: 50px;
+  background: #f8f8f8;
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
+  padding: 2px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* --- Stats --- */
+.stats {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.stats div {
+  background: #f2f2f2;
+  padding: 15px;
+  border-radius: 6px;
+}
+
+/* --- Students page --- */
+.stud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.stud h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #11224E;
+}
+
+.btn {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 14px;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+  border: none;
+  transition: background 0.2s;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+/* --- Table --- */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  background: white;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background: #f4f4f4;
+}  
+
+/* --- Content Scroll Block --- */
+.content-scroll {
+  /* Calculate the remaining height: 100% of .main minus the topbar height (approx 50px + 2px padding on topbar) */
+  height: calc(100vh - 54px); 
+  overflow-y: auto; /* **This adds the vertical scrollbar when content overflows** */
+  padding: 20px; /* Add the content padding here instead of on .main */
+}
+.student-link {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.student-link:hover {
+  text-decoration: underline;
+  color: #0056b3;
+}
+
+
+.optd{
+  width: 60px;
+  text-align: center;
+}

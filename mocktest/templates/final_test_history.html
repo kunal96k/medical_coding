@@ -1,0 +1,41 @@
+{% extends "student_dashboard.html" %}
+
+{% block content %}
+<h2 style="margin-left: 5%;">
+    {{ student.firstname }} {{ student.lastname }} - Final Test History
+</h2>
+
+<table border="1" cellpadding="10"
+       style="width:90%; border-collapse: collapse; margin-left: 5%;">
+    <tr>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Subject Percentages</th>
+        <th>Average %</th>
+        <th>Remark</th>
+    </tr>
+
+    {% for l in results %}
+    <tr>
+        <td>{{ l.test_date|date:"d-m-Y" }}</td>
+        <td>{{ l.test_date|time:"h:i A" }}</td>
+
+        <td>
+            {% for s in l.subject_results %}
+                {{ s.name }} : {{ s.percentage }}% <br>
+            {% endfor %}
+        </td>
+
+        <td>{{ l.average_percentage }}%</td>
+
+        <td>
+            {% if l.remark == "PASS" %}
+                <span style="color:green;font-weight:bold;">PASS</span>
+            {% else %}
+                <span style="color:red;font-weight:bold;">FAIL</span>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

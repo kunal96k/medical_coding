@@ -1,0 +1,63 @@
+{% extends "student_dashboard.html" %}
+
+{% block content %}
+<div style="max-width: 800px; margin: auto; border: 2px solid #333; padding: 20px; border-radius: 10px; font-family: Arial, sans-serif;">
+    <table style="width: 100%; border-bottom: 2px solid #333; margin-bottom: 20px;">
+        <tr>
+            <td style="width: 80px;">
+                <img src="../static/images/technokraft-logo.png" alt="Logo" style="width:200px; height:70px">
+            </td>
+            <td style="text-align: center;">
+                <h2 style="margin: 0;">Medical Coding Mock Test</h2>
+                <p style="margin: 0; font-size: 14px;">Official Result Sheet</p>
+            </td>
+        </tr>
+    </table>
+
+    <table style="width: 100%; border-collapse: collapse; text-align: center;">
+        <tr>
+            <td><strong>Student Name:</strong></td>
+            <td>{{ firstname }} {{ lastname }}</td>
+            <td><strong>Student Id</strong></td>
+            <td>{{ student_id }}</td>
+        </tr>
+        <tr>
+            <td><strong>Subject:</strong></td>
+            <td>{{ subject }}</td>
+            <td><strong>Test Date:</strong></td>
+            <td>{{ test_date }}</td>
+        </tr>
+        <tr>
+            <td><strong>Total Questions:</strong></td>
+            <td>30</td>
+            <td><strong>Attempted Questions:</strong></td>
+            <td>{{ total }}</td>
+        </tr>
+        
+    </table>
+
+    <div style="text-align: center; margin-bottom: 20px;margin-top: 15px;">
+        <h3 style="margin: 0;">Your Score: 
+            <span style="color: green;">{{ score }}</span> / 30
+        </h3>
+        <p>Percentage: <strong>{{ percentage }}%</strong></p>
+        <p>Result: 
+            {% if percentage >= 70 %}
+                <span style="color: green; font-weight: bold;">PASS</span>
+            {% else %}
+                <span style="color: red; font-weight: bold;">FAIL</span>
+            {% endif %}
+        </p>
+        <button type="button" style="background: #007bff;color: #fff; border-radius: 5px; padding: 10px 15px; border: none; cursor: pointer;" onclick="window.location.href='{% url 'review' %}'">
+            Exam Summary
+        </button>
+       
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <h5 style="color: red;">* Passing Percentage is 70% and above as per Global Certification Standards</h5><br>
+        <p>Technokraft Training & Solutions PVT.LTD</p>
+        <p style="font-size: 12px; color: gray;">This is a system-generated result, no signature required.</p>
+    </div>
+</div>
+{% endblock %}

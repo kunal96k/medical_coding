@@ -1,0 +1,28 @@
+
+
+{% extends "student_dashboard.html" %}
+
+{% block content %}
+{% for item in review_data %}
+<div style="border:1px solid #000; padding:15px; margin:15px;">
+
+    <p><strong>Q{{ forloop.counter }}: {{ item.question }}</strong></p>
+
+    <p>
+        <strong>Your Answer:</strong>
+        {% if item.is_correct %}
+            <span style="color:green;">{{ item.selected }} ✔</span>
+        {% else %}
+            <span style="color:red;">{{ item.selected }} ✘</span>
+        {% endif %}
+    </p>
+
+    <p>
+        <strong>Correct Answer:</strong>
+        <span style="color:green;">{{ item.correct }}</span>
+    </p>
+
+</div>
+{% endfor %}
+
+{% endblock %}

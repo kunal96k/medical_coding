@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.env
+
+# Database
+# db.sqlite3  # UNCOMMENT THIS IF YOU DO NOT WANT TO UPLOAD DB TO GIT
+
+# OS
+.DS_Store
+Thumbs.db

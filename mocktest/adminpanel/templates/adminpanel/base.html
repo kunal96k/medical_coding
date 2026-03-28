@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Custom Admin - {% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/custom_admin.css' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="{% static 'css/images/ttslogo.png' %}">
+</head>
+<body>
+  <!-- Fixed Sidebar -->
+  <div class="sidebar">
+    <div style="background-color: white;border-radius: 5px; padding: 5px;height: 65px;">
+      <img src="{% static 'css/images/technokraft-logo.png' %}" class="logo" alt="Logo">
+    </div>
+    <a href="{% url 'adminpanel_dashboard' %}">🏠 Dashboard</a>
+    <a href="{% url 'adminpanel_students' %}">👨‍🎓 Students</a>
+    <a href="{% url 'adminpanel_subjects' %}">📚 Subjects</a>
+    <a href="{% url 'adminpanel_questions' %}">❓ Mock Test Questions</a>
+    <a href="{% url 'final_question_list' %}">❓ Final Test Questions</a>
+    <a href="{% url 'mock_result_list' %}">📊 Mock Results</a>
+    <a href="{% url 'final_result_list' %}">📊 Final Mock Results</a>
+    <div style="margin-top: auto;">
+    <a href="{% url 'adminpanel_logout' %}" 
+       style="display: block; background-color: #e63946; color: white; text-align: center; 
+              padding: 10px; border-radius: 5px; margin-top: 20px;">
+      🚪 Logout
+    </a>
+  </div>
+  </div>
+  
+
+  <!-- Main Section -->
+  <div class="main">
+    <div class="topbar">
+      <h2>Admin Panel</h2>
+    {% if request.user.is_authenticated %}
+      <h3>Welcome, {{ request.user.username }}</h3>
+    {% else %}
+      <h3>Welcome, Guest</h3>
+    {% endif %}
+    </div>
+    <div>
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</body>
+</html>

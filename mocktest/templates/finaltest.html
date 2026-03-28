@@ -1,0 +1,1011 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Final Mock Test</title>
+<link rel="stylesheet" href="{% static 'css/finaltest.css' %}" />
+<style>
+/* ========== GENERAL LAYOUT ========== */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.exam-container {
+  display: flex;
+  flex: 1;
+}
+
+/* LEFT SIDEBAR (Subjects) */
+/* LEFT SIDEBAR COLLAPSE ANIMATION */
+.left-sidebar {
+ width: 220px;
+  background: #f4f4f4;
+  border-right: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  transition: transform 0.3s ease;
+  position: relative;
+  z-index: 5;
+  max-height: 100vh;
+  overflow-y: auto;
+}
+
+/* Fully hide sidebar off-screen */
+.left-sidebar.collapsed {
+  transform: translateX(-100%);
+}
+
+/* Toggle button (always visible) */
+#toggleSidebar {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 10;
+  border: none;
+  background: #11224E;
+  color: white;
+  border-radius: 5px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+
+.left-sidebar.collapsed #toggleSidebar {
+  left: 10px;
+}
+
+
+.subject-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.subject-list li {
+  padding: 8px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  background: #e0e0e0;
+  text-align: center;
+}
+
+.subject-list li.active {
+  background: #11224E;
+  color: white;
+  font-weight: bold;
+}
+
+#toggleSidebar {
+  border: none;
+  background: #11224E;
+  color: white;
+  border-radius: 5px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+/* MAIN CONTENT */
+.main-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #11224E;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+.timer {
+  text-align: right;
+}
+
+/* QUESTION AREA */
+.question {
+  display: none;
+  margin-top: 1px;
+}
+
+.question h2 {
+  margin-bottom: 10px;
+}
+
+.options label {
+  display: block;
+  margin: 5px 0;
+}
+
+/* RIGHT SIDEBAR (Question Grid) */
+.right-sidebar {
+  width: 70px;
+  background: #f9f9f9;
+  border-left: 1px solid #ccc;
+  padding: 15px;
+  transition: all 0.3s ease;
+  overflow-y: auto;
+  padding-top: 50px;
+}
+
+.right-sidebar.collapsed {
+  width: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+
+/* Make question buttons display vertically (top to bottom) */
+.question-grid {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  margin-top: 10px;
+  align-items: flex-start;
+}
+
+.question-grid button {
+  width: 100%;
+  height: 40px;
+  border-radius: 8px;
+  border: none;
+  background: #ddd;
+  cursor: pointer;
+  font-weight: bold;
+  text-align: center;
+  padding-left: 10px;
+}
+
+.question-grid button.active {
+  background: #11224E;
+  color: #fff;
+}
+
+.question-grid button.answered {
+  background: #28a745;
+  color: white;
+}
+
+.bottom-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.bottom-bar button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.primary {
+  background: #dc3545;
+  color: white;
+}
+
+.flag {
+  background: yellow;
+  color: white;
+}
+#flag-btn {
+  background-color: orange;
+  color: white;
+
+}
+/* Right toggle button */
+
+
+#prev-btn, #next-btn {
+  min-width: 100px;
+  background-color: #11224E;
+  color: white;
+}
+
+/* --- When a question is answered or flagged --- */
+.question-grid button.answered {
+  background-color: #28a745 !important;
+  color: #fff !important;
+}
+
+.question-grid button.flagged {
+  background-color: orange !important;
+  color: #fff !important;
+}
+
+/* Make question section scrollable */
+#question-section {
+  max-height: calc(100vh - 180px); /* adjusts for header + buttons */
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+/* Small clean scrollbar */
+#question-section::-webkit-scrollbar {
+  width: 6px;
+}
+
+#question-section::-webkit-scrollbar-thumb {
+  background: #bbb;
+  border-radius: 3px;
+}
+
+#question-section::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+/* Left Sidebar — scrollable with thin scrollbar */
+.left-sidebar { 
+  max-height: 100vh;
+  background-color: #f9f9f9;
+  border-right: 1px solid #ccc;
+
+}
+
+/* Thin scrollbar on the right side */
+
+/* Main content shifts when sidebar collapses */
+.main-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  transition: margin-left 0.3s ease;
+  margin-left: 0;
+}
+
+/* When sidebar is collapsed */
+.left-sidebar.collapsed ~ .main-content {
+  margin-left: -200px; /* fills space smoothly */
+}
+
+/* ====== MODAL BASE ====== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 10, 10, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(30px);
+  pointer-events: none;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  z-index: 9999;
+}
+
+.modal-overlay.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+  max-width: 500px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  animation: fadeSlideIn 0.6s ease forwards;
+}
+
+.modal-content h2 {
+  margin-bottom: 1rem;
+}
+
+.modal-content ul {
+  text-align: left;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.modal-content button {
+  background: #2a9d8f;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.modal-content button:hover {
+  background: #21867a;
+}
+
+/* Animation for slide + fade */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== CUSTOM IN-SCREEN ALERTS ===== */
+.custom-alert-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+
+.custom-alert-overlay.show {
+  display: flex;
+}
+
+.custom-alert-box {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  max-width: 450px;
+  text-align: center;
+  animation: alertBounce 0.4s ease;
+}
+
+.custom-alert-box h3 {
+  margin: 0 0 15px 0;
+  color: #dc3545;
+  font-size: 22px;
+}
+
+.custom-alert-box p {
+  margin: 0 0 20px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.custom-alert-box button {
+  background: #11224E;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 0 5px;
+}
+
+.custom-alert-box button.danger {
+  background: #dc3545;
+}
+
+.custom-alert-box button.success {
+  background: #28a745;
+}
+
+@keyframes alertBounce {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+
+/* ===== Floating Calculator ===== */
+
+
+#calculator {
+    display: none;
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    width: 250px;
+    background: white;
+    border: 2px solid #222;
+    padding: 10px;
+    border-radius: 8px;
+    z-index: 9999;
+}
+#calculator.show {
+    display: block;
+}
+
+/* Optional (recommended): Smooth appearing effect */
+#calculator.show {
+    animation: fadeIn 0.3s ease-in-out;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+#calculator h3 {
+  margin: 0 0 10px 0;
+  text-align: center;
+}
+
+#calculator .close-btn {
+  background: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  float: right;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.calc-screen {
+  width: 100%;
+  height: 45px;
+  font-size: 20px;
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #11224E;
+  border-radius: 5px;
+}
+
+.calc-btns {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.calc-btns button {
+  padding: 15px;
+  font-size: 18px;
+  border: none;
+  background: #f0f0f0;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.calc-btns button:active {
+  background: #ddd;
+}
+
+.calc-toggle-btn {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  align-items: end;
+}
+#timer {
+    color: white !important;
+    font-weight: bold;
+}
+
+
+</style>
+</head>
+
+<body>
+<div class="exam-container">
+
+  <!-- LEFT SIDEBAR -->
+  <!-- LEFT SIDEBAR -->
+<aside class="left-sidebar" id="left-sidebar">
+  <div class="sidebar-header">
+    <h2 style="margin-left: 60px;">Subjects</h2>
+  </div>
+
+  <ul class="subject-list">
+    {% for subject in subjects %}
+      <li class="{% if forloop.first %}active{% endif %}" onclick="showSubject('{{ subject.name }}')">
+        {{ subject.name }}
+      </li>
+    {% endfor %}
+  </ul>
+</aside>
+
+<!-- Toggle Button (ALWAYS VISIBLE) -->
+<button id="toggleSidebar">☰</button>
+
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <header class="top-bar">
+    <h1 id="exam-title">
+      <span id="main-title"></span>
+      <span id="subject-name"></span>
+      
+    </h1>
+
+    <div class="timer">
+        <img src="{% static 'images/icons8-calculator-48.png' %}" 
+            alt="calculator" 
+            id="calc-toggle-btn" 
+            class="calc-toggle-btn"
+            style="width:35px; height:35px; margin-right:10px; cursor:pointer;">
+
+        <span>TIME REMAINING</span>
+        <div class="countdown" id="timer">04:00:00</div>
+    </div>
+
+    </header>
+
+
+    <!-- Exam Rules Modal -->
+    <div id="exam-rules-modal" class="modal-overlay">
+      <div class="modal-content">
+        <h2>Exam Instructions</h2>
+        <ul>
+          <li>Do not refresh or close the browser during the exam.</li>
+          <li>Each question carries equal marks.</li>
+          <li>Once submitted, answers cannot be changed.</li>
+          <li>Switching tabs may auto-submit your test.</li>
+          <li>Exiting fullscreen will auto-submit your test.</li>
+        </ul>
+        <button id="start-exam-btn">Start Exam</button>
+      </div>
+    </div>
+
+
+    <section id="question-section">
+      <div  class="marker"><div class="question-grid" id="question-grid"></div></div>
+      {% for q in all_questions %}
+        <div class="question" data-index="{{ forloop.counter0 }}" data-subject="{{ q.subject }}" data-qnum="{{ q.number }}" data-qid="{{ q.id }}">
+          <h2>Question {{ q.number }}</h2> 
+          <p style="font-size: 18px;">{{ q.question }}</p>
+
+          <form class="options">
+            <label><input type="radio" name="question_{{ q.id }}" value="{{ q.option_a }}"> A) {{ q.option_a }}</label>
+            <label><input type="radio" name="question_{{ q.id }}" value="{{ q.option_b }}"> B) {{ q.option_b }}</label>
+            <label><input type="radio" name="question_{{ q.id }}" value="{{ q.option_c }}"> C) {{ q.option_c }}</label>
+            <label><input type="radio" name="question_{{ q.id }}" value="{{ q.option_d }}"> D) {{ q.option_d }}</label>
+          </form>
+        </div>
+      {% endfor %}
+    </section>
+
+    <div class="bottom-bar">
+      <button class="secondary" id="prev-btn">← Previous</button>
+      <div class="actions">
+        <button class="flag" id="flag-btn">⚑ Flag for Review</button>
+        <button class="primary" id="submit-btn">Finish & Submit Exam</button>
+      </div>
+      <button class="secondary" id="next-btn">Next →</button>
+    </div>
+  </main>
+
+  <!-- RIGHT SIDEBAR -->
+  
+</div>
+
+<!-- Custom Alert Overlay -->
+<div id="custom-alert" class="custom-alert-overlay">
+  <div class="custom-alert-box">
+    <h3 id="alert-title">Warning</h3>
+    <p id="alert-message">Message here</p>
+    <div id="alert-buttons">
+      <button id="alert-ok">OK</button>
+    </div>
+  </div>
+</div>
+
+
+<div id="calculator">
+  <button class="close-btn" id="calc-close">Close</button>
+  <h3>Calculator</h3>
+
+  <input type="text" id="calc-screen" class="calc-screen" disabled>
+
+  <div class="calc-btns">
+    <button onclick="press('7')">7</button>
+    <button onclick="press('8')">8</button>
+    <button onclick="press('9')">9</button>
+    <button onclick="press('/')">÷</button>
+
+    <button onclick="press('4')">4</button>
+    <button onclick="press('5')">5</button>
+    <button onclick="press('6')">6</button>
+    <button onclick="press('*')">×</button>
+
+    <button onclick="press('1')">1</button>
+    <button onclick="press('2')">2</button>
+    <button onclick="press('3')">3</button>
+    <button onclick="press('-')">−</button>
+
+    <button onclick="press('0')">0</button>
+    <button onclick="press('.')">.</button>
+    <button onclick="calculate()">=</button>
+    <button onclick="press('+')">+</button>
+
+    <button onclick="clearScreen()" style="grid-column: span 4; background:#11224E; color:white;">
+      Clear
+    </button>
+  </div>
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // ------------------- VARIABLES -------------------
+    const startBtn = document.getElementById("start-exam-btn");
+    const modal = document.getElementById("exam-rules-modal");
+    const timerElement = document.getElementById('timer');
+    const submitBtn = document.getElementById('submit-btn');
+    const examQuestions = document.querySelectorAll('.question');
+    const subjects = document.querySelectorAll('.subject-list li');
+    const grid = document.getElementById('question-grid');
+    let currentSubject = subjects[0]?.textContent?.trim();
+    let currentIndex = 0;
+    let examActive = false;
+    let totalSeconds = 4 * 60 * 60; // 4 hours
+    let tabChangeCount = 0;
+    let timerInterval = null;
+    let f11WarningCount = 0;
+    let userClickedSubmit = false;
+
+    const headerTitles = {
+    "00K Series": "Anesthesia",
+    "10K Series": "Integumentary System",
+    "20K Series": "Musculoskeletal System",
+    "30K Series": "Respiratory & Cardiovascular System",
+    "40K Series": "Digestive System",
+    "50K Series": "Genitourinary System (Urinary, Male/Female genital)",
+    "60K Series": "Endocrine & Nervous System",
+    "70K Series": "Radiology",
+    "80K Series": "Pathology & Laboratory",
+    "90K Series": "Medicine",
+    "99K Series": "Evaluation & Management (E&M Services)",
+    "Anatomy": "Human Anatomy Overview",
+    "Coding Guidelines": "CPT & ICD Coding Guidelines",
+    "Compliance": "Compliance & Regulatory Requirements",
+    "Cases": "Real-world Case Studies",
+    "HCPCS": "HCPCS Level II Codes",
+    "ICD": "ICD-10-CM Diagnosis Coding",
+    "Medical Terminology": "Medical Terminology Basics"
+};
+
+
+    // ------------------- CUSTOM ALERT SYSTEM -------------------
+    const customAlert = document.getElementById('custom-alert');
+    const alertTitle = document.getElementById('alert-title');
+    const alertMessage = document.getElementById('alert-message');
+    const alertButtons = document.getElementById('alert-buttons');
+
+    function showCustomAlert(title, message, buttons = [{text: 'OK', action: null}]) {
+        alertTitle.textContent = title;
+        alertMessage.textContent = message;
+        alertButtons.innerHTML = '';
+        
+        buttons.forEach(btn => {
+            const button = document.createElement('button');
+            button.textContent = btn.text;
+            if (btn.type === 'danger') button.classList.add('danger');
+            if (btn.type === 'success') button.classList.add('success');
+            button.onclick = () => {
+                customAlert.classList.remove('show');
+                if (btn.action) btn.action();
+            };
+            alertButtons.appendChild(button);
+        });
+        
+        customAlert.classList.add('show');
+    }
+
+    function hideCustomAlert() {
+        customAlert.classList.remove('show');
+    }
+
+    // ------------------- SHOW EXAM RULES MODAL -------------------
+    setTimeout(() => modal.classList.add("show"), 500);
+
+    startBtn.addEventListener("click", async () => {
+    modal.classList.remove("show");
+
+    // Request fullscreen
+    const el = document.documentElement;
+    if (el.requestFullscreen) await el.requestFullscreen();
+    else if (el.webkitRequestFullscreen) await el.webkitRequestFullscreen();
+    else if (el.msRequestFullscreen) await el.msRequestFullscreen();
+
+    examActive = true;
+    startTimer();
+    showQuestion(0, currentSubject);
+
+    // ✅ FIX: Set initial title on exam start
+    window.showSubject(currentSubject);
+    document.getElementById("calculator").classList.add("show");
+});
+
+    // ------------------- TIMER -------------------
+    function startTimer() {
+        updateTimerDisplay();
+        timerInterval = setInterval(() => {
+            if (totalSeconds <= 0) {
+                clearInterval(timerInterval);
+                autoSubmit("time");
+            } else {
+                totalSeconds--;
+                updateTimerDisplay();
+            }
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        const h = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+        const m = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+        const s = String(totalSeconds % 60).padStart(2, '0');
+        timerElement.textContent = `${h}:${m}:${s}`;
+    }
+
+    // ------------------- QUESTION GRID & NAVIGATION -------------------
+    function buildGrid(subject) {
+        grid.innerHTML = '';
+        const subjectQuestions = [...examQuestions].filter(q => q.dataset.subject === subject);
+        subjectQuestions.forEach((q, i) => {
+            const btn = document.createElement('button');
+            btn.textContent = q.dataset.qnum;
+            btn.classList.add('qbtn');
+            if (q.classList.contains('answered')) btn.classList.add('answered');
+            if (q.classList.contains('flagged')) btn.classList.add('flagged');
+            btn.addEventListener('click', () => showQuestion(i, subject));
+            grid.appendChild(btn);
+        });
+    }
+
+    function showQuestion(index, subject) {
+        const subjectQuestions = [...examQuestions].filter(q => q.dataset.subject === subject);
+        examQuestions.forEach(q => q.style.display = 'none');
+        if (subjectQuestions[index]) subjectQuestions[index].style.display = 'block';
+        currentIndex = index;
+
+        document.querySelectorAll('.qbtn').forEach(btn => btn.classList.remove('active'));
+        const btn = grid.children[index];
+        if (btn) btn.classList.add('active');
+    }
+
+    window.showSubject = (subject) => {
+    currentSubject = subject;
+
+    subjects.forEach(s => s.classList.remove('active'));
+    [...subjects].find(li => li.textContent.trim() === subject)?.classList.add('active');
+
+    buildGrid(subject);
+    showQuestion(0, subject);
+
+    // --- Change header title based on dictionary ---
+    document.getElementById("subject-name").innerText = " > " + subject;
+
+    if (headerTitles[subject]) {
+        document.getElementById("exam-title").childNodes[0].textContent =
+            headerTitles[subject] + " ";
+    }
+};
+
+
+
+    // ------------------- ANSWER TRACKING -------------------
+    document.querySelectorAll('.options input[type="radio"]').forEach(input => {
+        input.addEventListener('change', e => {
+            const question = e.target.closest('.question');
+            question.classList.add('answered');
+            question.classList.remove('flagged');
+            const qnum = question.dataset.qnum;
+            const btn = [...grid.children].find(b => b.textContent === qnum);
+            if (btn) {
+                btn.classList.add('answered');
+                btn.classList.remove('flagged');
+            }
+        });
+    });
+
+    // ------------------- FLAG BUTTON -------------------
+    const flagBtn = document.getElementById('flag-btn');
+    flagBtn.addEventListener('click', () => {
+        const subjectQuestions = [...examQuestions].filter(q => q.dataset.subject === currentSubject);
+        const currentQuestion = subjectQuestions[currentIndex];
+        const qnum = currentQuestion.dataset.qnum;
+        currentQuestion.classList.toggle('flagged');
+        const btn = [...grid.children].find(b => b.textContent === qnum);
+        if (btn) btn.classList.toggle('flagged');
+    });
+
+    // ------------------- NAVIGATION -------------------
+    document.getElementById('next-btn').addEventListener('click', () => {
+        const subjectQuestions = [...examQuestions].filter(q => q.dataset.subject === currentSubject);
+        if (currentIndex < subjectQuestions.length - 1) showQuestion(currentIndex + 1, currentSubject);
+    });
+
+    document.getElementById('prev-btn').addEventListener('click', () => {
+        if (currentIndex > 0) showQuestion(currentIndex - 1, currentSubject);
+    });
+    
+
+    // ------------------- SUBMIT EXAM (MANUAL) -------------------
+    submitBtn.addEventListener('click', () => {
+        showCustomAlert(
+            '⚠️ Submit Exam',
+            'Are you sure you want to submit the exam? This action cannot be undone.',
+            [
+                { text: 'Cancel', action: null },
+                { 
+                    text: 'Submit', 
+                    type: 'danger',
+                    action: () => {
+                        userClickedSubmit = true;
+                        examActive = false;
+
+                        const answers = [];
+                        examQuestions.forEach(q => {
+                            const qid = q.dataset.qid;
+                            const selected = q.querySelector("input[type='radio']:checked");
+                            const ans = selected ? selected.value : null;
+                            answers.push({ id: qid, answer: ans });
+                        });
+
+                        fetch("/finaltest/submit/", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json", "X-CSRFToken": "{{ csrf_token }}" },
+                            body: JSON.stringify({ answers: answers })
+                        }).then(r => r.json()).then(data => {
+                            if (data.status === "ok") {
+                                if (document.exitFullscreen) document.exitFullscreen();
+                                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                                else if (document.msExitFullscreen) document.msExitFullscreen();
+                                
+                                window.location.href = data.redirect;
+                            }
+                        });
+                    }
+                }
+            ]
+        );
+    });
+
+    // ------------------- AUTO SUBMIT (NO ALERT) -------------------
+    function autoSubmit(reason) {
+        if (userClickedSubmit) return; // ✅ Don't auto-submit if user already clicked submit
+
+        examActive = false;
+        
+        // Silently collect answers
+        const answers = [];
+        examQuestions.forEach(q => {
+            const qid = q.dataset.qid;
+            const selected = q.querySelector("input[type='radio']:checked");
+            const ans = selected ? selected.value : null;
+            answers.push({ id: qid, answer: ans });
+        });
+
+        // Submit without alert
+        fetch("/finaltest/submit/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-CSRFToken": "{{ csrf_token }}" },
+            body: JSON.stringify({ answers: answers })
+        }).then(r => r.json()).then(data => {
+            if (data.status === "ok") window.location.href = data.redirect;
+        });
+    }
+
+    // ------------------- TAB SWITCH / REFRESH / KEYS -------------------
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden && examActive) {
+            tabChangeCount++;
+            showCustomAlert(
+                '⚠️ Tab Switch Detected',
+                `You switched tabs! Warning ${tabChangeCount} of 3. After 3 attempts, your exam will be auto-submitted.`,
+                [{ text: 'Continue Exam', action: null }]
+            );
+            if (tabChangeCount >= 3) autoSubmit("tab-switch");
+        }
+    });
+
+    window.addEventListener("beforeunload", e => {
+        if (examActive) { 
+            e.preventDefault(); 
+            e.returnValue = "⚠️ You cannot leave or refresh the page during the exam!"; 
+        }
+    });
+
+    document.addEventListener("contextmenu", e => e.preventDefault());
+    
+    document.addEventListener("keydown", e => {
+        if (!examActive) return;
+
+        // Block common shortcuts
+        if (e.ctrlKey && ["s","p","r","c","v","x"].includes(e.key.toLowerCase())) e.preventDefault();
+        if ((e.ctrlKey && e.shiftKey && e.key.toLowerCase()==="i") || e.key==="F12") e.preventDefault();
+
+        // F11 warning
+        if (e.key === "F11") {
+            f11WarningCount++;
+            if (f11WarningCount < 3) {
+                e.preventDefault();
+                showCustomAlert(
+                    '⚠️ F11 Not Allowed',
+                    `Pressing F11 is not allowed during the exam! Warning ${f11WarningCount} of 3.`,
+                    [{ text: 'OK', action: null }]
+                );
+            } else {
+                autoSubmit("f11-limit");
+            }
+        }
+    });
+
+    // ✅ FIXED: Fullscreen exit handler (NO ALERT, just auto-submit)
+    document.addEventListener("fullscreenchange", () => {
+        if (!document.fullscreenElement && examActive && !userClickedSubmit) {
+            autoSubmit("fullscreen-exit");
+        }
+    });
+
+    // ------------------- SIDEBAR TOGGLE -------------------
+    document.getElementById('toggleSidebar').addEventListener('click', () => {
+        document.getElementById('left-sidebar').classList.toggle('collapsed');
+    });
+
+    // ------------------- CALCULATOR -------------------
+    const calcBtn = document.getElementById("calc-toggle-btn");
+    const calculator = document.getElementById("calculator");
+    const calcClose = document.getElementById("calc-close");
+
+    calcBtn.addEventListener("click", () => { calculator.style.display = "block"; calculator.style.zIndex = 10000; });
+    calcClose.addEventListener("click", () => { calculator.style.display = "none"; });
+
+    function press(val) { document.getElementById("calc-screen").value += val; }
+    function clearScreen() { document.getElementById("calc-screen").value = ""; }
+    function calculate() {
+        try { document.getElementById("calc-screen").value = eval(document.getElementById("calc-screen").value); }
+        catch { document.getElementById("calc-screen").value = "Error"; }
+    }
+    window.press = press; window.clearScreen = clearScreen; window.calculate = calculate;
+
+    // Draggable calculator
+    let isDragging = false, offsetX, offsetY;
+    calculator.addEventListener("mousedown", e => { isDragging = true; offsetX = e.clientX - calculator.offsetLeft; offsetY = e.clientY - calculator.offsetTop; });
+    document.addEventListener("mousemove", e => { if(isDragging){ calculator.style.left = e.clientX - offsetX + "px"; calculator.style.top = e.clientY - offsetY + "px"; }});
+    document.addEventListener("mouseup", () => { isDragging = false; });
+
+    // ------------------- INITIALIZE -------------------
+    buildGrid(currentSubject);
+    showQuestion(0, currentSubject);
+});
+
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

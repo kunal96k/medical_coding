@@ -1,0 +1,135 @@
+{% extends "adminpanel/base.html" %}
+{% block title %}Final Questions{% endblock %}
+{% block page_title %}Final Questions{% endblock %}
+
+{% block content %}
+
+  <style>
+    table {
+      width: 95%;
+      border-collapse: collapse;
+      margin-left: 30px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #11224E;
+      color: white;
+    }
+    tr:hover {
+      background-color: #f9f9f9;
+    }
+    .h1 { 
+      margin-left: 30px;
+      font-size: 24px;
+      color: #11224E;
+      display: inline-block;
+    }
+    .top-bar {
+      margin-left: 30px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .top-bar input[type="text"] {
+      padding: 6px 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 250px;
+    }
+    .top-bar button {
+      background-color: #11224E;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .top-bar button:hover {
+      background-color: #0d1b3b;
+    }
+    .opt-col {
+      width: 80px;
+      text-align: center;
+      word-wrap: break-word;
+    }
+    .edit-btn {
+      background-color: #28a745;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+    .edit-btn:hover {
+      background-color: #218838;
+    }
+    .delete-btn {
+      background-color: #dc3545;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+    }
+    .delete-btn:hover {
+      background-color: #c82333;
+    }
+  </style>
+
+  <div class="top-bar">
+    <h1 class="h1">Final Question List</h1>
+    <form method="GET" action="" style="display:inline;">
+      <input type="text" name="q" placeholder="Search final questions..." value="{{ request.GET.q }}">
+      <button type="submit">Search</button>
+    </form>
+    <a href="{% url 'upload_final_fixture' %}"><button type="button">Add Final Question</button></a>
+  </div>
+
+  {% if final_questions %}
+    <table>
+      <thead>
+        <tr>
+          <th>Question ID</th>
+          <th>Question Text</th>
+          <th>Subject</th>
+          <th>Correct Option</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for q in final_questions %}
+          <tr>
+            <td>{{ q.id }}</td>
+            <td>{{ q.question_text }}</td>
+            <td>{{ q.subject.name }}</td>
+            <td class="opt-col">{{ q.correct_answer }}</td>
+            <td>
+              <a href="{% url 'edit_final_question' q.id %}">
+                <button class="edit-btn" type="button">Edit</button>
+              </a>
+              <form method="POST" action="{% url 'delete_final_question' q.id %}" style="display:inline;" onsubmit="return confirmDelete();">
+                {% csrf_token %}
+                <button class="delete-btn" type="submit">Delete</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p style="margin-left: 30px;">No final questions available.</p>
+  {% endif %}
+
+  <script>
+    function confirmDelete() {
+      return confirm('Are you sure you want to delete this final question? This action cannot be undone!');
+    }
+  </script>
+
+{% endblock %}

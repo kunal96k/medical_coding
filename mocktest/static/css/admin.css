@@ -1,0 +1,250 @@
+/* ===== Google Font Import - Poppins ===== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+:root {
+    --primary-color: #2563eb;      /* blue-600 */
+    --secondary-color: #10b981;    /* green-500 */
+    --accent-color: #f59e0b;       /* amber-500 */
+    --danger-color: #ef4444;       /* red-500 */
+    --panel-color: #ffffff;
+    --text-color: #111827;
+    --subtext-color: #6b7280;
+    --border-color: #e5e7eb;
+
+    --box-gradient-1: linear-gradient(135deg, #2563eb, #3b82f6);
+    --box-gradient-2: linear-gradient(135deg, #10b981, #34d399);
+    --box-gradient-3: linear-gradient(135deg, #f59e0b, #fbbf24);
+
+    --tran-05: all 0.5s ease;
+    --tran-03: all 0.3s ease;
+}
+
+/* ===== Base ===== */
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #e0f2fe, #e6fffa);
+    color: var(--text-color);
+}
+
+/* ===== Sidebar ===== */
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 260px;
+    background: var(--panel-color);
+    border-right: 1px solid var(--border-color);
+    box-shadow: 2px 0 10px rgba(0,0,0,0.08);
+    transition: var(--tran-05);
+    z-index: 100;
+    padding: 20px 14px;
+    border-radius: 0 1rem 1rem 0;
+}
+
+nav .logo-image img {
+    width: 180px;
+    object-fit: contain;
+    margin: 0 auto;
+}
+
+/* Menu */
+.menu-items {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: calc(100% - 120px);
+}
+
+.menu-items li {
+    list-style: none;
+    margin-bottom: 8px;
+}
+
+/* ===== Sidebar Menu Links ===== */
+.menu-items li a {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--subtext-color); /* normal link text color */
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+/* Icon inside link */
+.menu-items li a i {
+    font-size: 20px;
+    margin-right: 12px;
+    transition: color 0.3s ease;
+}
+
+/* Hover effect for non-active links */
+.menu-items li a:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(37,99,235,0.25);
+}
+
+.menu-items li a:hover i {
+    color: #fff;
+}
+
+/* ===== Active Link Styling ===== */
+.menu-items li a.active {
+    background-color: var(--primary-color); /* blue background */
+    color: #fff;                             /* link text white */
+    border-radius: 10px;                     /* rounded corners */
+    box-shadow: 0 4px 10px rgba(37,99,235,0.25);
+}
+
+/* Force icon and text inside active link to white */
+.menu-items li a.active i,
+.menu-items li a.active .link-name {
+    color: #fff !important;
+}
+
+/* Optional: keep hover effect on active link */
+.menu-items li a.active:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+
+/* ===== Dashboard ===== */
+.dashboard {
+    margin-left: 260px;
+    padding: 20px;
+    transition: var(--tran-05);
+}
+
+/* Top Bar */
+.dashboard .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.search-box {
+    position: relative;
+    max-width: 400px;
+    width: 100%;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 10px 45px 10px 15px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    outline: none;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.search-box input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 8px rgba(37,99,235,0.25);
+}
+
+.search-box i {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--subtext-color);
+}
+
+/* Boxes */
+.boxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.box {
+    flex: 1 1 calc(33% - 20px);
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease;
+   
+}
+
+.box:hover {
+    transform: translateY(-5px);
+}
+
+.box1 { background: var(--box-gradient-1); }
+.box2 { background: var(--box-gradient-2); }
+.box3 { background: var(--box-gradient-3); }
+
+.box i {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.box .number {
+    font-size: 32px;
+    font-weight: 700;
+}
+
+/* Activity Table */
+.activity {
+    margin-top: 40px;
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    overflow-x: auto;
+}
+
+.activity .title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+.activity-data {
+    display: flex;
+    gap: 30px;
+    font-size: 14px;
+    color: var(--subtext-color);
+}
+
+.activity-data .data {
+    min-width: 120px;
+}
+
+.data-title {
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+
+.data-list {
+    margin-bottom: 12px;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .boxes { flex-direction: column; }
+    nav { width: 200px; }
+    .dashboard { margin-left: 200px; }
+}
+
+@media (max-width: 768px) {
+    nav { position: relative; width: 100%; height: auto; border-radius: 0; }
+    .dashboard { margin-left: 0; }
+}

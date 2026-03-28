@@ -1,0 +1,54 @@
+{% extends "adminpanel/base.html" %}
+{% block title %}Add Student{% endblock %}
+{% block page_title %}Add Student{% endblock %}
+
+{% block content %}
+<div style="
+    max-width: 500px;
+    margin: 60px auto;
+    background: #fff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+">
+    <h1 style="text-align: center; color: #11224E; margin-bottom: 20px;">Add Student</h1>
+
+    <form method="POST" style="display: flex; flex-direction: column; gap: 15px;">
+        {% csrf_token %}
+        
+        <div>
+            <label style="font-weight: 600;">First Name:</label>
+            <input type="text" name="firstname" required
+                   style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px;">
+        </div>
+
+        <div>
+            <label style="font-weight: 600;">Middle Name:</label>
+            <input type="text" name="middlename" required
+                   style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px;">
+        </div>
+
+        <div>
+            <label style="font-weight: 600;">Last Name:</label>
+            <input type="text" name="lastname" required
+                   style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px;">
+        </div>
+        <div>
+            <label style="font-weight: 600;">Password:</label>
+            <input type="password" name="password" required
+                   style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px;">
+        </div>
+
+        <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+            <button type="submit"
+                style="background-color: #11224E; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
+                Save
+            </button>
+            <a href="{% url 'adminpanel_students' %}"
+               style="background-color: #999; color: white; text-decoration: none; padding: 10px 20px; border-radius: 6px;">
+               Cancel
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

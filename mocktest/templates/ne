@@ -1,0 +1,429 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mock Test</title>
+<link rel="stylesheet" href="{% static 'css/test.css' %}">
+
+<style>
+/* --- Modal --- */
+#modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.7);
+  display: none; justify-content: center; align-items: center;
+  z-index: 2000;
+}
+#modal-box {
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  max-width: 420px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+#modal-box h3 {
+  margin-bottom: 15px;
+}
+#modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+#modal-buttons button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+#modal-ok { background: #007bff; color: #fff; }
+#modal-cancel { background: #6c757d; color: #fff; }
+/* --- Start overlay (before test begins) --- */
+#start-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.9); /* dark overlay */
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 1500; /* above everything except modal */
+  text-align: center;
+}
+#start-overlay h2 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+#start-overlay p {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+#start-overlay button {
+  padding: 14px 28px;
+  font-size: 18px;
+  background: #28a745;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+#start-overlay button:hover {
+  background: #218838;
+}
+
+ /* Action buttons layout */
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 25px;
+  gap: 15px; /* space between buttons */
+}
+
+/* General style for all action buttons */
+.action-buttons button {
+  min-width: 120px;         /* all buttons same width */
+  padding: 14px 24px;       /* bigger size */
+  font-size: 18px;          /* larger text */
+  font-weight: bold;
+  border-radius: 10px;      /* smoother corners */
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+}
+
+/* Hover effect for all */
+
+/* Previous button */
+#prev-btn {
+  background: #6c757d;
+  color: #fff;
+}
+#prev-btn:hover:enabled {
+  background: #5a6268;
+}
+#prev-btn:disabled {
+  background: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
+/* Next button */
+#next-btn {
+  background: #007bff;
+  color: #fff;
+}
+#next-btn:hover {
+  background: #0069d9;
+}
+
+/* Mark for Review */
+#review-btn {
+  background: #6f42c1;
+  color: #fff;
+}
+#review-btn:hover {
+  background: #5936a2;
+}
+
+/* Submit button (always at right corner) */
+#submit-btn {
+  background: #dc3545;
+  color: #fff;
+  margin-left: auto;  /* push to right corner */
+}
+#submit-btn:hover {
+  background: #c82333;
+}
+.sidebar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* top-aligned for other content */
+  width: 220px;
+  background: #11224E;
+  padding: 20px;
+  box-shadow: 3px 0 6px rgba(122, 110, 110, 0.2);
+}
+
+.sidebar-warning {
+  margin-top: auto;      /* push to bottom */
+  color: red;
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+  padding-top: 10px;
+}
+
+
+</style>
+</head>
+<body>
+<!-- Start Overlay -->
+<div id="start-overlay">
+  <h2>Welcome to the {{selected_subject}} Mock Test</h2>
+  <p style="color: red;font-size: 22px;">⚠️ This Test is meant to be conducted in Fullscreen.
+    <br> Do not switch tabs or exit fullscreen. Otherwise, the exam will be auto-submitted!
+  </p>
+    <h2 style="color: red;">⚠️ Please do not Try to Refresh using F11. Otherwise the test will be auto-submitted</h2>
+  <button id="start-exam-btn">Start Exam</button>
+</div>
+
+<!-- Modal -->
+<div id="modal-overlay">
+  <div id="modal-box">
+    <h3 id="modal-message">Message</h3>
+    <div id="modal-buttons">
+      <button id="modal-ok">OK</button>
+      <button id="modal-cancel" style="display:none;">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Exam Container -->
+<div class="container" style="display:none;">
+  <aside class="sidebar">
+    <img src="{% static 'images/technokraft-logo.png' %}" alt="Logo">
+    <p><strong>Choose a Question</strong></p>
+    <div class="question-grid">
+      {% for q in questions %}
+      <button type="button" id="qbtn-{{ forloop.counter0 }}" data-answered="false"
+              onclick="goToQuestion({{ forloop.counter0 }})">
+        {{ forloop.counter }}
+      </button>
+      {% endfor %}
+    </div>
+    <div class="sidebar-warning">
+    ⚠️ This Test is meant to be conducted in Fullscreen. Do not switch tabs or exit fullscreen. Otherwise, the exam will be auto-submitted!
+    </div>
+  </aside>
+
+  <main class="main-content">
+
+    <header class="header">
+      <h3>{{selected_subject}} Mock Test</h3>
+      <p><strong>Time Left:</strong> <span id="timer">60:00</span></p>
+    </header>
+    <div class="scroll-warning">
+      <marquee behavior="scroll" direction="left" scrollamount="6" style="color: red; font-weight: bold;">
+        ⚠️ If try to exit Fullscreen mode using F11,Esc or using browser controls the Test will be auto-submitted ⚠️
+      </marquee>
+    </div>
+
+    <form id="mcq-test-form" method="post">
+      {% csrf_token %}
+      {% for question in questions %}
+      <div class="question" data-index="{{ forloop.counter0 }}" style="display:none;">
+        <div class="question-box">
+          <h3>Q{{ forloop.counter }}: {{ question.question_text }}</h3>
+        </div>
+        <div class="answer-box">
+          <label><input type="radio" name="question_{{ question.id }}" value="{{ question.option1 }}"> {{ question.option1 }}</label>
+          <label><input type="radio" name="question_{{ question.id }}" value="{{ question.option2 }}"> {{ question.option2 }}</label>
+          <label><input type="radio" name="question_{{ question.id }}" value="{{ question.option3 }}"> {{ question.option3 }}</label>
+          <label><input type="radio" name="question_{{ question.id }}" value="{{ question.option4 }}"> {{ question.option4 }}</label>
+        </div>
+      </div>
+      {% endfor %}
+      <div class="action-buttons">
+        <div>
+          <button type="button" id="prev-btn">Previous</button>
+          <button type="button" id="next-btn">Next</button>
+        </div>
+        <button type="submit" id="submit-btn">Submit Test</button>
+      </div>
+    </form>
+  </main>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const questions = document.querySelectorAll('.question');
+  let currentQuestionIndex = 0;
+  let timerInterval = null;
+  let examActive = false; // default: exam not started
+
+  // --- Get references ---
+  const startBtn = document.getElementById("start-exam-btn");
+  const startOverlay = document.getElementById("start-overlay");
+  const container = document.querySelector(".container");
+  const submitBtn = document.getElementById("submit-btn");
+  const examForm = document.getElementById('mcq-test-form');
+  const display = document.getElementById('timer');
+
+  // --- Modal System ---
+  const modal = document.getElementById("modal-overlay");
+  const modalMsg = document.getElementById("modal-message");
+  const modalOk = document.getElementById("modal-ok");
+  const modalCancel = document.getElementById("modal-cancel");
+  let modalResolve;
+
+  function showModal(message, confirm=false) {
+    modalMsg.textContent = message;
+    modal.style.display = "flex";
+    modalCancel.style.display = confirm ? "inline-block" : "none";
+    return new Promise(resolve => {
+      modalResolve = resolve;
+    });
+  }
+  modalOk.onclick = () => { modal.style.display="none"; modalResolve(true); };
+  modalCancel.onclick = () => { modal.style.display="none"; modalResolve(false); };
+
+  // --- Fullscreen ---
+  function enterFullscreen() {
+    const el = document.documentElement;
+    if (el.requestFullscreen) return el.requestFullscreen();
+    if (el.mozRequestFullScreen) return el.mozRequestFullScreen();
+    if (el.webkitRequestFullscreen) return el.webkitRequestFullscreen();
+    if (el.msRequestFullscreen) return el.msRequestFullscreen();
+  }
+
+  // --- Timer ---
+  function startTimer(durationInSeconds, display) {
+    let timer = durationInSeconds;
+    if (timerInterval) clearInterval(timerInterval);
+
+    timerInterval = setInterval(() => {
+      let minutes = Math.floor(timer / 60);
+      let seconds = timer % 60;
+      display.textContent =
+        (minutes<10?"0":"")+minutes+":"+(seconds<10?"0":"")+seconds;
+
+      if (timer <= 60) {
+        display.classList.remove('warning');
+        display.classList.add('danger');
+      } else if (timer <= 600) {
+        display.classList.remove('danger');
+        display.classList.add('warning');
+      } else {
+        display.classList.remove('warning', 'danger');
+      }
+
+      if (timer <= 0 && examActive) {
+      clearInterval(timerInterval);
+      examActive = false;
+      alert("Time is up! Submitting test...");
+      examForm.requestSubmit();  // ✅ guaranteed form submit
+    }
+
+    timer--;
+  }, 1000);
+  }
+
+  // ---------------- SHOW QUESTION ----------------
+  function showQuestion(index) {
+    currentQuestionIndex = index;
+    questions.forEach((q,i)=> q.style.display = (i===index)?"block":"none");
+    document.querySelectorAll('.question-grid button').forEach((btn,i)=>{
+      btn.classList.remove('active-question');
+      if(btn.dataset.answered==="true") btn.classList.add('answered');
+      if(btn.dataset.review==="true") btn.classList.add('review');
+      if(i===index) btn.classList.add('active-question');
+    });
+    document.getElementById('prev-btn').disabled = index===0;
+    document.getElementById('next-btn').style.display = index===questions.length-1?'none':'inline-block';
+    document.getElementById('submit-btn').style.display = 'inline-block';
+  }
+  window.goToQuestion = showQuestion; // enable sidebar buttons
+
+  // --- Track Answers ---
+  document.querySelectorAll('.question input[type=radio]').forEach(input=>{
+    input.addEventListener('change', ()=>{
+      const qIndex = parseInt(input.closest('.question').dataset.index);
+      const btn = document.getElementById('qbtn-'+qIndex);
+      btn.dataset.answered = "true";
+      btn.classList.add('answered');
+    });
+  });
+
+  // --- Navigation ---
+  document.getElementById('next-btn').addEventListener('click', ()=> {
+    if(currentQuestionIndex < questions.length-1) showQuestion(currentQuestionIndex+1);
+  });
+  document.getElementById('prev-btn').addEventListener('click', ()=> {
+    if(currentQuestionIndex >0) showQuestion(currentQuestionIndex-1);
+  });
+
+  // ---------------- SUBMIT ----------------
+  examForm.addEventListener('submit', (e)=>{
+    if(!confirm("Submit your test?")) {
+        e.preventDefault();
+        return;
+    }
+    examActive = false;  // allow leaving after submit
+  });
+
+  // ---------------- TAB CHANGE RESTRICTION ----------------
+  let tabChangeCount = 0;
+  document.addEventListener("visibilitychange", function () {
+      if (document.hidden && examActive) {
+          tabChangeCount++;
+          alert("⚠️ Warning: You switched tabs! Attempt " + tabChangeCount + " of 3");
+
+          if (tabChangeCount >= 3) {
+              alert("❌ You switched tabs 3 times. Exam will be auto-submitted.");
+              examActive = false;
+              examForm.requestSubmit();   // ✅ fixed
+          }
+      }
+  });
+
+  // ---------------- PREVENT REFRESH / LEAVE ----------------
+  window.addEventListener("beforeunload", function (e) {
+    if (examActive) {
+      e.preventDefault();
+      e.returnValue = "You cannot leave or refresh until you finish the exam!";
+    }
+  });
+
+  // --- Disable Right Click + Keys ---
+  document.addEventListener("contextmenu", e => e.preventDefault());
+  document.addEventListener("keydown", async e => {
+    if (e.ctrlKey && ["c","v","x"].includes(e.key.toLowerCase())) e.preventDefault();
+    if ((e.ctrlKey && ["s","p"].includes(e.key.toLowerCase())) ||
+        (e.ctrlKey && e.shiftKey && e.key.toLowerCase()==="i") ||
+        e.key==="F12") {
+      e.preventDefault();
+      await showModal("⚠️ This action is disabled during the exam.");
+    }
+  });
+
+  // --- Start Button ---
+  startBtn.addEventListener("click", async () => {
+    try {
+      await enterFullscreen();
+      startOverlay.style.display = "none";
+      container.style.display = "flex";
+      examActive = true;
+      startTimer(60 * 60, display); // 1 hour
+      showQuestion(currentQuestionIndex);
+    } catch (err) {
+      console.warn("Fullscreen was not allowed:", err);
+      await showModal("⚠️ You must allow fullscreen to start the test.");
+    }
+  });
+
+  // --- Fullscreen Exit ---
+  async function handleFullscreenExit() {
+    if (!document.fullscreenElement && examActive) {
+      await showModal("❌ You exited fullscreen! The test will be auto-submitted.");
+      examActive = false;
+      submitBtn.style.display = "none";
+      examForm.requestSubmit();   // ✅ fixed
+    }
+  }
+  document.addEventListener("fullscreenchange", handleFullscreenExit);
+});
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+{% extends "student_dashboard.html" %}
+{% block content %}
+<div style="width: 1000px; margin: auto;">
+    <h2>Test Review</h2>
+
+    <table border="1" cellpadding="10" cellspacing="1" 
+           style="width: 100%; border-collapse: collapse; text-align: center;">
+        <tr>
+            <th>#</th>
+            <th>Question</th>
+            <th>Your Answer</th>
+            
+            <th>Remark</th>
+        </tr>
+        {% for ans in answers %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td style="text-align:left;">{{ ans.question }}</td>
+            <td>
+                {% if ans.selected %}
+                    {{ ans.selected }}
+                {% else %}
+                    <i>Not Attempted</i>
+                {% endif %}
+            </td>
+            
+            <td> {% if ans.selected == ans.correct %}
+                    Correct ✅
+                {% else %}
+                    Wrong ❌
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

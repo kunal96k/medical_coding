@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login</title>
+<link rel="stylesheet" href="../static/css/login.css">
+<link rel="icon" type="image/x-icon" href="{% static 'css/images/ttslogo.png' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+<body>
+
+  <!-- Main content -->
+  <div class="main-container">
+    <div class="login-container">
+       <img src="../static/images/technokraft-logo.png" alt="" class="logo" style="width: 300px; height: 100px;">
+      <h2>ADMIN LOGIN</h2>
+       
+      <form method="post">
+        {% csrf_token %}
+        <input type="text" name="username" required placeholder="Enter Username"><br>
+        <div class="col-md-6">
+              <input id="password-field" type="password" class="form-control" name="password" placeholder="Enter Password">
+              <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+            </div><br>
+        <button type="submit" style="background-color: #007bff ">Login</button><br>
+          {% if messages %}
+          <div class="messages" style="align-self: center;">
+              {% for message in messages %}
+                  <div class="alert alert-{{ message.tags }}" style="color: red;">
+                      {{ message }}
+                  </div>
+              {% endfor %}
+          </div>
+      {% endif %}
+      </form>
+
+    </div>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const toggle = document.querySelector(".toggle-password");
+    const input = document.querySelector(toggle.getAttribute("toggle"));
+
+    toggle.addEventListener("click", function () {
+        const type = input.getAttribute("type") === "password" ? "text" : "password";
+        input.setAttribute("type", type);
+
+        // Change icon
+        this.classList.toggle("fa-eye");
+        this.classList.toggle("fa-eye-slash");
+    });
+});
+  </script>
+
+</body>
+</html>
+
+
+

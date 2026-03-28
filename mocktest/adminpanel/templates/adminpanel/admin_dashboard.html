@@ -1,0 +1,45 @@
+{% extends "adminpanel/base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="content-scroll">
+  <div class="stud">
+    <h1>Dashboard</h1>
+  </div>
+
+  <div class="stats" style="display: flex; gap: 20px; margin-bottom: 20px;">
+    <div style="background: #11224E; color: white; padding: 15px; border-radius: 8px; flex: 1; text-align: center;">
+      Students: {{ student_count }}
+    </div>
+    <div style="background: #11224E; color: white; padding: 15px; border-radius: 8px; flex: 1; text-align: center;">
+      Subjects: {{ subject_count }}
+    </div>
+    <div style="background: #11224E; color: white; padding: 15px; border-radius: 8px; flex: 1; text-align: center;">
+      Questions: {{ question_count }}
+    </div>
+    <div style="background: #11224E; color: white; padding: 15px; border-radius: 8px; flex: 1; text-align: center;">
+      Results: {{ result_count }}
+    </div>
+  </div>
+
+  <h3 style="margin-bottom: 10px;">Recent Test Results</h3>
+
+  <table border="1" cellpadding="6" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+    <tr >
+      <th>Student Name</th>
+      <th>Subject</th>
+      <th>Score</th>
+      <th>Date</th>
+    </tr>
+    {% for result in recent_results %}
+      <tr>
+        <td>{{ result.student.firstname }} {{ result.student.lastname }}</td>
+        <td>{{ result.subject.name }}</td>
+        <td>{{ result.score }}/{{ result.total_questions }}</td>
+        <td>{{ result.date_taken }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="4" style="text-align:center;">No results yet.</td></tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "adminpanel/base.html" %}
+{% block title %}Upload Fixture{% endblock %}
+{% block page_title %}Upload Fixture{% endblock %}
+
+{% block content %}
+<div style="margin: 40px; text-align: center;">
+  <h2>📤 Upload Question CSV File</h2>
+  <p style="color: gray;">File name must match the subject name (e.g. <b>Math.csv</b>)</p>
+
+  <form method="post" enctype="multipart/form-data" 
+        style="margin-top: 20px; border: 2px dashed #11224E; padding: 30px; border-radius: 10px; width: 400px; margin-left: auto; margin-right: auto;">
+    {% csrf_token %}
+    
+    <input type="file" name="fixture_file" accept=".csv" required 
+           style="margin-bottom: 15px; border: 1px solid #ccc; padding: 8px; border-radius: 5px; width: 100%;">
+    
+    <button type="submit" 
+            style="padding: 10px 20px; background-color: #11224E; color: white; border: none; border-radius: 5px; cursor: pointer;">
+      Upload CSV
+    </button>
+  </form>
+
+  {% if messages %}
+    <ul style="margin-top: 20px; list-style: none; padding: 0;">
+      {% for message in messages %}
+        <li style="color: {% if message.level_tag == 'error' %}red{% else %}green{% endif %}; font-weight: 500;">
+          {{ message }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</div>
+{% endblock %}

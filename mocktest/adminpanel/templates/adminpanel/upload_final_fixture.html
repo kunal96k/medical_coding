@@ -1,0 +1,101 @@
+{% extends "adminpanel/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="upload-page">
+  <div class="upload-box">
+    <h2>📤 Upload Final Question CSV</h2>
+
+    <!-- show Django messages -->
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <!-- upload form -->
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="fixture_file">Select Final Question CSV File:</label>
+        <input type="file" id="fixture_file" name="fixture_file" accept=".csv" required>
+      </div>
+
+      <button type="submit" class="btn-upload">Upload</button>
+    </form>
+
+    <p class="info">
+      💡 <b>Important:</b> The CSV file name must match the subject name.<br>
+      Example: <code>Python.csv</code> or <code>DataScience.csv</code><br><br>
+      Each row should contain the following headers:<br>
+      <code>question_text, option1, option2, option3, option4, correct_answer</code>
+    </p>
+
+    <a href="{% url 'final_question_list' %}" class="btn-view">View Final Questions →</a>
+  </div>
+</div>
+
+<style>
+.upload-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0;
+  background: #f6f8fa;
+  min-height: 80vh;
+}
+.upload-box {
+  background: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  width: 500px;
+  text-align: center;
+}
+.upload-box h2 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+.form-group {
+  margin: 15px 0;
+}
+input[type="file"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+}
+.btn-upload {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+.btn-upload:hover {
+  background: #43a047;
+}
+.btn-view {
+  display: inline-block;
+  margin-top: 20px;
+  text-decoration: none;
+  color: #2196f3;
+  font-weight: 500;
+}
+.messages {
+  list-style: none;
+  padding: 0;
+}
+.messages li {
+  margin: 10px 0;
+  padding: 8px;
+  border-radius: 5px;
+}
+.messages li.success { background: #d4edda; color: #155724; }
+.messages li.error { background: #f8d7da; color: #721c24; }
+</style>
+{% endblock %}
